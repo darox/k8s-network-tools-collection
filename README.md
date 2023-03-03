@@ -17,4 +17,5 @@ improve the networking performance of their Kubernetes deployment.
 | flamethrower | Load Testing | ns1labs/flame:latest     | [flamethrower](https://github.com/DNS-OARC/flamethrower) |
 | netshoot     | Multi-tool   | nicolaka/netshoot:latest | [netshoot](https://github.com/nicolaka/netshoot)         |
 | pwru         | Kernel       | cilium/pwru:latest       | [pwru](https://github.com/cilium/pwru)                   |
+| ddosify.     | Load Testing | ddosify/ddosify:latest   | [ddosify](https://github.com/ddosify/ddosify)            |
 
