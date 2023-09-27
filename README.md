@@ -12,9 +12,17 @@ improve the networking performance of their Kubernetes deployment.
 
 ## Tools
 
-| Name         | Group        | OCI IMAGE                        | Link                                                           |
-| ------------ | ------------ | -------------------------------- | -------------------------------------------------------------- |
-| flamethrower | Load Testing | ns1labs/flame:latest             | [flamethrower](https://github.com/DNS-OARC/flamethrower)       |
-| netshoot     | Multi-tool   | nicolaka/netshoot:latest         | [netshoot](https://github.com/nicolaka/netshoot)               |
-| ncat         | Ncat         | itsthenetwork/alpine-ncat:latest | [ncat](https://hub.docker.com/r/itsthenetwork/alpine-ncat/tags) |
+| Name         | OCI IMAGE                        | Link                                                           |
+| ------------ | -------------------------------- | -------------------------------------------------------------- |
+| flamethrower | ns1labs/flame:latest             | [flamethrower](https://github.com/DNS-OARC/flamethrower)       |
+| netshoot     | nicolaka/netshoot:latest         | [netshoot](https://github.com/nicolaka/netshoot)               |
+| ncat         | itsthenetwork/alpine-ncat:latest | [ncat](https://hub.docker.com/r/itsthenetwork/alpine-ncat/tags)|
+| pwru         | docker.io/cilium/pwru:latest     | [pwru](https://github.com/cilium/pwru)                         |
+| tetragon     | quay.io/cilium/tetragon          | [tetragon](https://github.com/cilium/tetragon)                 |
 
+## Scripts
+
+The scripts folder includes some scripts to launch ad-hoc pods for running tools like pwru or tetragon. Store these scripts somewhere on your machine and create an alias under `~/.zshrc` or `~/.bashrc` to make them available in your shell. An example is:
+```
+alias pwru="~/scripts/pwru.sh"
+```                                                                                                                                                 
