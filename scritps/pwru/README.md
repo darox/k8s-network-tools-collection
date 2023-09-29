@@ -4,6 +4,8 @@ See https://github.com/cilium/pwru for more information.
 
 ## Notes
 
+Please be aware that the following notes mainly relate to the usage of pwru when running Cilium.
+
 When analysing VXLAN or IPsec encapsulated packets. The following argument can be added to follow the skbs:
 
 ```
@@ -129,7 +131,7 @@ The above command can be executed within the cilium-agent pod.
     filter protocol all pref 1 bpf chain 0 handle 0x1 bpf_lxc.o:[from-container] direct-action not_in_hw id 16370 tag 830ad784df42d29f jited
     ```
    What corresponds to https://github.com/cilium/cilium/blob/main/bpf/bpf_lxc.c#L1344
-   
+
 
 
 
