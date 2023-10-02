@@ -6,7 +6,9 @@ Tetragon is a Security Observability and Runtime enforcement tool. It can be use
 
 ## Usage 
 
-The script in this folder expects a node name and a policy as arguments. The included policy in this folder tracks all connections executed by the `curl` command. 
+The script in this folder expects only a node name as argument. Optional are policy and grep filter arguments to filter the output. 
+If no policy is specified, the script defaults to the policy in this folder. This policy tracks all connections from curl. 
+See below for the policy:
 
 ```yaml
 apiVersion: cilium.io/v1alpha1
@@ -34,10 +36,10 @@ In the console we will see:
 💥 exit     /usr/bin/curl https://1.1.1.1 0 
 ```
 
-The script optionally takes a third argument to specify a filter for grep to filter the output. 
+The below command will run the script with the default policy and filter the output for the curl process. 
 
 ```bash
-bash tetragon.sh ip-10-2-0-18.eu-central-2.compute.internal policy.yaml
+tetragon ip-10-2-0-18.eu-central-2.compute.internal "" "curl"
 ```
 
 This third argument is supported because Tetragon doesn't support disabling the standard sensor i.e. process events. 

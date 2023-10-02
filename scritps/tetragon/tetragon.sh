@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # Check if arguments is either 2 or 3
-if [ $# -ne 2 ] && [ $# -ne 3 ]; then
-  echo "Usage: my_script NODE TETRA_POLICY [GREP_ARGS]"
+if [ $# -ne 1 ] && [ $# -ne 2 ] && [ $# -ne 3 ]; then
+  echo "Usage: my_script NODE [TETRA_POLICY] [GREP_ARGS]"
   exit 1
 fi
 
@@ -10,8 +10,13 @@ NODE="$1"
 TETRA_POLICY="$2"
 GREP_ARGS="$3"
 
-
+# On ctrl-c, delete the pod and configmap
 trap " kubectl delete --wait=false pod tetragon && kubectl delete cm tetragon-policy" EXIT
+
+# If no policy is provided, the script defaults to the policy.yaml in the same directory.
+if [ -z "$TETRA_POLICY" ]; then
+  TETRA_POLICY="$(dirname "$0")/policy.yaml"
+fi
 
 kubectl create configmap tetragon-policy --from-file=policy.yaml="$TETRA_POLICY"
 
