@@ -1,0 +1,92 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: troubleshooter-dig
+  namespace: default
+  labels:
+    k8s-app: troubleshooter-dig
+spec:
+  selector:
+    matchLabels:
+      name: troubleshooter-dig
+  template:
+    metadata:
+      labels:
+        name: troubleshooter-dig
+    spec:
+      dnsPolicy: "ClusterFirst"
+      containers:
+      - name: dig
+        image: nicolaka/netshoot
+        command: ["/bin/sh", "-c", "--"]
+        args: ['echo "This pod tests the DNS resolution time:" && while true; do dig one.one.one.one | grep time; sleep 60; done']
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: troubleshooter-ncat-ip
+  namespace: default
+  labels:
+    k8s-app: troubleshooter-ncat-ip
+spec:
+  selector:
+    matchLabels:
+      name: troubleshooter-ncat-ip
+  template:
+    metadata:
+      labels:
+        name: troubleshooter-ncat-ip
+    spec:
+      dnsPolicy: "ClusterFirst"
+      containers:
+      - name: ncat-ip
+        image: itsthenetwork/alpine-ncat:latest
+        command: ["/bin/sh", "-c", "--"]
+        args: ['echo "This pod tests the tcp connection via IP:" && while true; do ncat -v -z 1.1.1.1 443 2>&1 | sed -n "3 s/.*in \(.* seconds\)\./\1/p"; sleep 60; done']
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: troubleshooter-ncat-hostname
+  namespace: default
+  labels:
+    k8s-app: troubleshooter-ncat-hostname
+spec:
+  selector:
+    matchLabels:
+      name: troubleshooter-ncat-hostname
+  template:
+    metadata:
+      labels:
+        name: troubleshooter-ncat-hostname
+    spec:
+      dnsPolicy: "ClusterFirst"
+      containers:
+      - name: ncat-hostname
+        image: itsthenetwork/alpine-ncat:latest
+        command: ["/bin/sh", "-c", "--"]
+        args: ['echo "This pod tests the tcp connection via hostname:" && while true; do ncat -v -z one.one.one.one 443 2>&1 | sed -n "3 s/.*in \(.* seconds\)\./\1/p"; sleep 60; done']
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: troubleshooter-curl-hostname
+  namespace: default
+  labels:
+    k8s-app: troubleshooter-curl-hostname
+spec:
+  selector:
+    matchLabels:
+      name: troubleshooter-curl-hostname
+  template:
+    metadata:
+      labels:
+        name: troubleshooter-curl-hostname
+    spec:
+      dnsPolicy: "ClusterFirst"
+      containers:
+      - name: curl-hostname
+        image: nicolaka/netshoot
+        command: ["/bin/sh", "-c", "--"]
+        args: ['echo "This pod tests the HTTPS connection time:" && while true; do curl -o /dev/null -s -w "Establish Connection: %{time_connect}s\nTTFB: %{time_starttransfer}s\nTotal: %{time_total}s\n"  https://one.one.one.one; sleep 60; done']        
