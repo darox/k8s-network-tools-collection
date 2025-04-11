@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: dnsperf
+  name: dnsperf
+  namespace: default
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: dnsperf
+  template:
+    metadata:
+      labels:
+        app: dnsperf
+    spec:
+      # we must download the file via curl, because the configmap is otherwise too large
+      initContainers:
+      - name: download-records
+        image: curlimages/curl:8.5.0
+        command:
+        - sh
+        - -c
+        - |
+          curl -s https://gist.githubusercontent.com/darox/ab14a9030fca5081e5a145ac4a7f4851/raw/62808e8bb2bdfa64b02d09ae1dfe5e749309b8e8/60k-domains -o /opt/download/records.txt
+        volumeMounts:
+        - mountPath: /opt/download/
+          name: shared-data
+      containers:
+      - name: dnsperf
+        image: guessi/dnsperf
+        imagePullPolicy: Always
+        env:
+        - name: DNSPERF_RECORDS_INPUT
+          value: "/opt/records.txt"
+        - name: EXTRA_ARGS
+          value: "-c 1 -T 1 -l 3600 -t 5 -Q 700"
+        volumeMounts:
+        - mountPath: /opt/records.txt
+          name: shared-data
+          subPath: records.txt
+          readOnly: true
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      volumes:
+      - name: shared-data
+        emptyDir: {}
